@@ -1,0 +1,41 @@
+{
+  "name": "bad-checks",
+  "version": "0.0.1",
+  "description": "Utilities for validating values in 0bdx apps, libraries and websites.",
+  "type": "module",
+  "files": [
+    "bad-checks.d.ts",
+    "bad-checks.js"
+  ],
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "main": "bad-checks.js",
+  "scripts": {
+    "build:prod": "rollup -c",
+    "build:types": "tsc bad-checks.js --allowJs --declaration --emitDeclarationOnly",
+    "build": "for s in {prod,types};do npm run build:$s;done",
+    "preflight:test": "echo \"🧬 test.js\" && node test.js",
+    "preflight:types": "tsc bad-checks.js --allowJs --checkJs --noEmit",
+    "preflight": "for s in {test,types};do npm run preflight:$s;done",
+    "test": "echo \"🧪 src/test.js\" && node src/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0bdx/bad-checks.git"
+  },
+  "keywords": [
+    "validate"
+  ],
+  "author": "0bdx <0@0bdx.com> (0bdx.com)",
+  "license": "MIT",
+  "types": "./bad-checks.d.ts",
+  "bugs": {
+    "url": "https://github.com/0bdx/bad-checks/issues"
+  },
+  "homepage": "https://github.com/0bdx/bad-checks#readme",
+  "devDependencies": {
+    "@0bdx/build-helpers": "^0.0.4",
+    "rollup": "^3.17.2"
+  }
+}
