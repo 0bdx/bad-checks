@@ -1,9 +1,6 @@
-/**
- * https://www.npmjs.com/package/bad-checks
- * @version 0.0.1
- * @license Copyright (c) 2023 0bdx <0@0bdx.com> (0bdx.com)
- * SPDX-License-Identifier: MIT
- */
+import equal from './private-methods/equal.js';
+import throws from './private-methods/throws.js';
+
 /** A string, or boolean false. Returned by `BadCheck` and `BoundBadCheck`.
  * @typedef {string|false} StringOrFalse */
 /** A validator function fresh out of the library, before being bound.
@@ -24,7 +21,7 @@
  * @throws
  *     Throws an `Error` if any of the arguments are invalid.
  */
-function bindBadChecks(msgPrefix, ...badChecks) {
+export default function bindBadChecks(msgPrefix, ...badChecks) {
     const ep = 'Error: bindBadChecks():'; // error prefix
 
     // Validate the `msgPrefix` argument.
@@ -64,4 +61,66 @@ function bindBadChecks(msgPrefix, ...badChecks) {
 const bindBadCheck = (msgPrefix, checkMsgs, badCheck) =>
     (...args) => badCheck(msgPrefix, checkMsgs, ...args);
 
-export { bindBadChecks };
+/**
+ * bindBadChecks() unit tests.
+ * 
+ * @param {bindBadChecks} f
+ *     The `bindBadChecks()` function to test.
+ * @returns {void}
+ *     Does not return anything.
+ * @throws
+ *     Throws an `Error` if a test fails
+ */
+export function bindBadChecksTest(f) {
+    const ep = 'Error: bindBadChecks():'; // error prefix
+
+    /** @type BadCheck */
+    const spy1 = (pfx, msgs, a, b, c) => {
+        msgs.push(`${pfx}: spy1 ${a}${b}${c}`);
+        return false;
+    };
+    /** @type BadCheck */
+    const spy2 = (pfx, msgs, a, b, c) => {
+        msgs.push(`${pfx}: spy2 ${a}${b}${c}`);
+        return `${pfx}: spy2 ${a}${b}${c}`;
+    };
+
+    // `msgPrefix` is an incorrect type.
+    // @ts-expect-error
+    throws(()=>f(),
+        `${ep} msgPrefix is type 'undefined' not 'string'`);
+    throws(()=>f(null),
+        `${ep} msgPrefix is null not 'string'`);
+    // @ts-expect-error
+    throws(()=>f(true),
+        `${ep} msgPrefix is type 'boolean' not 'string'`);
+
+    // @ts-expect-error
+    throws(()=>f('', 1e3),
+        `${ep} badChecks[0] is type 'number' not 'function'`);
+
+    // Arguments are ok, and bindBadChecks() returns an array whose first item
+    // is an array of strings, and whose remaining items are all functions.
+    equal(JSON.stringify(f('')),
+        '[[]]');
+    equal(JSON.stringify(f('foo()')),
+        '[[]]');
+    equal(Array.isArray(f('foo()', spy1)),
+        true);
+    equal(f('foo()', spy1).length,
+        2);
+    equal(Array.isArray(f('foo()', spy1)[0]),
+        true);
+    equal(typeof f('foo()', spy1)[1],
+        'function');
+
+    // Simulate typical usage.
+    const [ checkMsgs, boundSpy1, boundSpy2 ] = f('foo()', spy1, spy2);
+    equal(JSON.stringify(checkMsgs), '[]');
+    const boundSpy1Result = boundSpy1('A', 'B', 'C');
+    equal(boundSpy1Result, false);
+    equal(JSON.stringify(checkMsgs), '["foo(): spy1 ABC"]');
+    const boundSpy2Result = boundSpy2('A', 'B', 'C');
+    equal(boundSpy2Result, 'foo(): spy2 ABC');
+    equal(JSON.stringify(checkMsgs), '["foo(): spy1 ABC","foo(): spy2 ABC"]');
+}

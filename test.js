@@ -1,7 +1,7 @@
 import {
-    foo,
+    bindBadChecks,
 } from './bad-checks.js';
 
-import fooTest from './src/foo.test.js';
+import { bindBadChecksTest } from './src/bind-bad-checks.js';
 
-fooTest(foo);
+bindBadChecksTest(bindBadChecks);

@@ -1,1 +1,1 @@
-export { default as foo } from './foo.js';
+export { default as bindBadChecks } from './bind-bad-checks.js';

@@ -15,12 +15,12 @@ Utilities for validating values in 0bdx apps, libraries and websites.
 import bindBadChecks, { isBadInteger } from '@0bdx/bad-checks';
 
 function sayOk(n) {
-    const { checkMsgs, isBadInt } = bindBadChecks('sayOk()', isBadInteger);
-    if (isBadInt(n, 'n', 1000, 2999)) return checkMsgs;
+    const [ checkMsgs, isBadInt ] = bindBadChecks('sayOk()', isBadInteger);
+    if (isBadInt(n, 'n', 0, 2000)) return checkMsgs;
     return 'ok!';
 }
 
-sayOk(1234); // ok!
 sayOk(null); // sayOk(): 'n' is null not type 'number'
-sayOk(3000); // sayOk(): 'n' 3000 is > 2999
+sayOk(7777); // sayOk(): 'n' 7777 is greater than 2000
+sayOk(1234); // ok!
 ```
