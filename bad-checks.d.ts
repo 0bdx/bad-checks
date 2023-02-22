@@ -36,3 +36,27 @@ export type BoundBadCheck = (...args: any[]) => StringOrFalse;
  *     Throws an `Error` if any of the arguments are invalid.
  */
 export function bindBadChecks(msgPrefix: string, ...badChecks: BadCheck[]): [string[], ...BoundBadCheck];
+/**
+ * Validates an integer.
+ *
+ * @param {string} msgPrefix
+ *     Added to the start of every check-message, typically a function name.
+ * @param {string[]} checkMsgs
+ *     Stores a message for each invalid value that the function finds.
+ *     Note that this array may be shared with other `BoundBadCheck` functions.
+ * @param {number} value
+ *     The value to check.
+ * @param {string} [identifier='']
+ *     What to call `value` in the explanation, if invalid. Defaults to "".
+ * @param {number} [min=-Infinity]
+ *     The minimum `value` is allowed to be. Defaults to minus infinity.
+ * @param {number} [max=Infinity]
+ *     The maximum `value` is allowed to be. Defaults to infinity.
+ * @param {number} [divisibleBy=1]
+ *     `value` must divisible by this number, with no remainder. Defaults to 1.
+ * @returns {string|false}
+ *     Returns `false` if `value` is valid, or an explanation if invalid.
+ * @throws
+ *     Throws an `Error` if any of the arguments are invalid.
+ */
+export function isBadInteger(msgPrefix: string, checkMsgs: string[], value: number, identifier?: string, min?: number, max?: number, divisibleBy?: number): string | false;
