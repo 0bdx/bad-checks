@@ -12,7 +12,7 @@ import throws from './private-methods/throws.js';
  * Prepares validation functions for use.
  *
  * @param {string} msgPrefix
- *     Added to the start of every check-message, typically a function name.
+ *     Added to the start of every explanation, typically a function name.
  * @param {...BadCheck} badChecks
  *     Any number of functions, to bind to `msgPrefix` and `checkMsgs`.
  * @returns {[string[], ...BoundBadCheck]}
@@ -49,7 +49,7 @@ export default function bindBadChecks(msgPrefix, ...badChecks) {
  * Prepares a validation function for use.
  * 
  * @param {string} msgPrefix
- *     Added to the start of every check-message, typically a function name.
+ *     Added to the start of every explanation, typically a function name.
  * @param {string[]} checkMsgs
  *     Stores a message for each invalid value that the function finds.
  *     Note that this array may be shared with other `BoundBadCheck` functions.

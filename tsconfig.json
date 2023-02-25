@@ -22,6 +22,9 @@
   
         // Only output d.ts files, don't try to transpile JS files to JS files.
         "emitDeclarationOnly": true,
+
+        // Allow ES2020 features, like `BigInt`.
+        "lib": [ "dom", "es2020" ]
     },
 
     // Match all JavaScript files in the source directory.

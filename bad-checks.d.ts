@@ -26,7 +26,7 @@ export type BoundBadCheck = (...args: any[]) => StringOrFalse;
  * Prepares validation functions for use.
  *
  * @param {string} msgPrefix
- *     Added to the start of every check-message, typically a function name.
+ *     Added to the start of every explanation, typically a function name.
  * @param {...BadCheck} badChecks
  *     Any number of functions, to bind to `msgPrefix` and `checkMsgs`.
  * @returns {[string[], ...BoundBadCheck]}
@@ -40,7 +40,7 @@ export function bindBadChecks(msgPrefix: string, ...badChecks: BadCheck[]): [str
  * Validates an integer.
  *
  * @param {string} msgPrefix
- *     Added to the start of every check-message, typically a function name.
+ *     Added to the start of every explanation, typically a function name.
  * @param {string[]} checkMsgs
  *     Stores a message for each invalid value that the function finds.
  *     Note that this array may be shared with other `BoundBadCheck` functions.
@@ -57,6 +57,6 @@ export function bindBadChecks(msgPrefix: string, ...badChecks: BadCheck[]): [str
  * @returns {string|false}
  *     Returns `false` if `value` is valid, or an explanation if invalid.
  * @throws
- *     Throws an `Error` if any of the arguments are invalid.
+ *     Throws an `Error` if any of the arguments are incorrect.
  */
 export function isBadInteger(msgPrefix: string, checkMsgs: string[], value: number, identifier?: string, min?: number, max?: number, divisibleBy?: number): string | false;

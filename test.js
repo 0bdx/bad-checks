@@ -1,3 +1,5 @@
+// Note that private methods like `isBadType()` are NOT tested here.
+
 import {
     isBadInteger,
     bindBadChecks,

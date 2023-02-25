@@ -5,7 +5,7 @@ import throws from './private-methods/throws.js';
  * Validates an integer.
  *
  * @param {string} msgPrefix
- *     Added to the start of every check-message, typically a function name.
+ *     Added to the start of every explanation, typically a function name.
  * @param {string[]} checkMsgs
  *     Stores a message for each invalid value that the function finds.
  *     Note that this array may be shared with other `BoundBadCheck` functions.
@@ -22,7 +22,7 @@ import throws from './private-methods/throws.js';
  * @returns {string|false}
  *     Returns `false` if `value` is valid, or an explanation if invalid.
  * @throws
- *     Throws an `Error` if any of the arguments are invalid.
+ *     Throws an `Error` if any of the arguments are incorrect.
  */
 export default function isBadInteger(
     msgPrefix,
@@ -35,7 +35,7 @@ export default function isBadInteger(
 ) {
     const ep = 'Error: isBadInteger():'; // error prefix
 
-    // Validate the `msgPrefix` argument.
+    // Throw an `Error` if the `msgPrefix` argument is incorrect.
     if (typeof msgPrefix !== 'string') {
         if (msgPrefix === null) throw Error(`${ep
             } msgPrefix is null not type 'string'`);
@@ -45,7 +45,7 @@ export default function isBadInteger(
             } msgPrefix is type '${typeof msgPrefix}' not type 'string'`);
     }
 
-    // Validate the `checkMsgs` argument.
+    // Throw an `Error` if the `checkMsgs` argument is incorrect.
     if (!Array.isArray(checkMsgs)) {
         if (checkMsgs === null) throw Error(`${ep
             } checkMsgs is null not an array`);
