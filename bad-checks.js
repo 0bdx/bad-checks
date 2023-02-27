@@ -236,4 +236,68 @@ function isBadInteger(
     return false;
 }
 
-export { bindBadChecks, isBadBoolean, isBadInteger };
+/**
+ * Validates a string.
+ *
+ * @param {string} msgPrefix
+ *     Added to the start of every explanation, typically a function name.
+ * @param {string[]} checkMsgs
+ *     Stores a message for each invalid value that the function finds.
+ *     Note that this array may be shared with other `BoundBadCheck` functions.
+ * @param {string} value
+ *     The value to check.
+ * @param {string} [identifier='']
+ *     What to call `value` in the explanation, if invalid. Defaults to "".
+ * @returns {string|false}
+ *     Returns `false` if `value` is valid, or an explanation if invalid.
+ * @throws
+ *     Throws an `Error` if any of the arguments are incorrect.
+ */
+function isBadString(
+    msgPrefix,
+    checkMsgs,
+    value,
+    identifier = '',
+) {
+    const ep = 'Error: isBadString():'; // error prefix
+
+    // Throw an `Error` if the `msgPrefix` argument is incorrect.
+    if (typeof msgPrefix !== 'string') {
+        if (msgPrefix === null) throw Error(`${ep
+            } msgPrefix is null not type 'string'`);
+        if (Array.isArray(msgPrefix)) throw Error(`${ep
+            } msgPrefix is an array not type 'string'`);
+        throw Error(`${ep
+            } msgPrefix is type '${typeof msgPrefix}' not type 'string'`);
+    }
+
+    // Throw an `Error` if the `checkMsgs` argument is incorrect.
+    if (!Array.isArray(checkMsgs)) {
+        if (checkMsgs === null) throw Error(`${ep
+            } checkMsgs is null not an array`);
+        throw Error(`${ep
+            } checkMsgs is type '${typeof checkMsgs}' not an array`);
+    } else {
+        for (let i=0, len=checkMsgs.length; i<len; i++) {
+            if (typeof checkMsgs[i] !== 'string') {
+                const item = checkMsgs[i];
+                if (item === null) throw Error(`${ep
+                    } checkMsgs[${i}] is null not type 'string'`);
+                if (Array.isArray(item)) throw Error(`${ep
+                    } checkMsgs[${i}] is an array not type 'string'`);
+                throw Error(`${ep
+                    } checkMsgs[${i}] is type '${typeof item}' not type 'string'`);
+            }
+        }
+    }
+
+    // Use the isBadType() utility to check whether `value` is a string.
+    // If not, store the check-message in the shared `checkMsgs` array.
+    const checkResult = isBadType(msgPrefix, value, identifier, 'string');
+    if (checkResult) checkMsgs.push(checkResult);
+
+    // If `value` is a string return false, otherwise return the check-message.
+    return checkResult;
+}
+
+export { bindBadChecks, isBadBoolean, isBadInteger, isBadString };

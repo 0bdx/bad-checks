@@ -78,3 +78,21 @@ export function isBadBoolean(msgPrefix: string, checkMsgs: string[], value: bool
  *     Throws an `Error` if any of the arguments are incorrect.
  */
 export function isBadInteger(msgPrefix: string, checkMsgs: string[], value: number, identifier?: string, min?: number, max?: number, divisibleBy?: number): string | false;
+/**
+ * Validates a string.
+ *
+ * @param {string} msgPrefix
+ *     Added to the start of every explanation, typically a function name.
+ * @param {string[]} checkMsgs
+ *     Stores a message for each invalid value that the function finds.
+ *     Note that this array may be shared with other `BoundBadCheck` functions.
+ * @param {string} value
+ *     The value to check.
+ * @param {string} [identifier='']
+ *     What to call `value` in the explanation, if invalid. Defaults to "".
+ * @returns {string|false}
+ *     Returns `false` if `value` is valid, or an explanation if invalid.
+ * @throws
+ *     Throws an `Error` if any of the arguments are incorrect.
+ */
+export function isBadString(msgPrefix: string, checkMsgs: string[], value: string, identifier?: string): string | false;
