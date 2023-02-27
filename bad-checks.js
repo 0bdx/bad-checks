@@ -65,6 +65,111 @@ const bindBadCheck = (msgPrefix, checkMsgs, badCheck) =>
     (...args) => badCheck(msgPrefix, checkMsgs, ...args);
 
 /**
+ * @private
+ * Validates a value using JavaScript's native `typeof`.
+ * 
+ * As a private method, isBadType() assumes that the arguments have already been
+ * checked for correctness, so it never throws an `Error`.
+ * 
+ * Due to the way `typeof` works, these are all valid, so return `false`:
+ * - `isBadType('', null, '', 'object')`
+ * - `isBadType('', [99], '', 'object')`
+ * - `isBadType('', NaN, '', 'number')`
+ *
+ * @param {string} msgPrefix
+ *     Added to the start of every explanation, typically a function name.
+ * @param {any} value
+ *     The value to check.
+ * @param {string} identifier
+ *     What to call `value` in the explanation, if invalid.
+ * @param {'bigint'|'boolean'|'function'|'number'|'object'|'string'|'symbol'|'undefined'} typeStr
+ *     The JavaScript type to expect, eg "boolean" or "undefined".
+ * @returns {string|false}
+ *     Returns `false` if `value` is valid, or an explanation if invalid.
+ */
+function isBadType(
+    msgPrefix,
+    value,
+    identifier,
+    typeStr,
+) {
+    const type = typeof value;
+    if (type === typeStr) return false;
+    return `${msgPrefix}: ${identifier || 'A value'} ${
+        value === null
+            ? 'is null not type'
+            : Array.isArray(value)
+                ? 'is an array not type'
+                : `is type '${type}' not`
+        } '${typeStr}'`
+    ;
+}
+
+/**
+ * Validates a boolean.
+ *
+ * @param {string} msgPrefix
+ *     Added to the start of every explanation, typically a function name.
+ * @param {string[]} checkMsgs
+ *     Stores a message for each invalid value that the function finds.
+ *     Note that this array may be shared with other `BoundBadCheck` functions.
+ * @param {boolean} value
+ *     The value to check.
+ * @param {string} [identifier='']
+ *     What to call `value` in the explanation, if invalid. Defaults to "".
+ * @returns {string|false}
+ *     Returns `false` if `value` is valid, or an explanation if invalid.
+ * @throws
+ *     Throws an `Error` if any of the arguments are incorrect.
+ */
+function isBadBoolean(
+    msgPrefix,
+    checkMsgs,
+    value,
+    identifier = '',
+) {
+    const ep = 'Error: isBadBoolean():'; // error prefix
+
+    // Throw an `Error` if the `msgPrefix` argument is incorrect.
+    if (typeof msgPrefix !== 'string') {
+        if (msgPrefix === null) throw Error(`${ep
+            } msgPrefix is null not type 'string'`);
+        if (Array.isArray(msgPrefix)) throw Error(`${ep
+            } msgPrefix is an array not type 'string'`);
+        throw Error(`${ep
+            } msgPrefix is type '${typeof msgPrefix}' not type 'string'`);
+    }
+
+    // Throw an `Error` if the `checkMsgs` argument is incorrect.
+    if (!Array.isArray(checkMsgs)) {
+        if (checkMsgs === null) throw Error(`${ep
+            } checkMsgs is null not an array`);
+        throw Error(`${ep
+            } checkMsgs is type '${typeof checkMsgs}' not an array`);
+    } else {
+        for (let i=0, len=checkMsgs.length; i<len; i++) {
+            if (typeof checkMsgs[i] !== 'string') {
+                const item = checkMsgs[i];
+                if (item === null) throw Error(`${ep
+                    } checkMsgs[${i}] is null not type 'string'`);
+                if (Array.isArray(item)) throw Error(`${ep
+                    } checkMsgs[${i}] is an array not type 'string'`);
+                throw Error(`${ep
+                    } checkMsgs[${i}] is type '${typeof item}' not type 'string'`);
+            }
+        }
+    }
+
+    // Use the isBadType() utility to check whether `value` is a boolean.
+    // If not, store the check-message in the shared `checkMsgs` array.
+    const checkResult = isBadType(msgPrefix, value, identifier, 'boolean');
+    if (checkResult) checkMsgs.push(checkResult);
+
+    // If `value` is a boolean return false, otherwise return the check-message.
+    return checkResult;
+}
+
+/**
  * Validates an integer.
  *
  * @param {string} msgPrefix
@@ -131,4 +236,4 @@ function isBadInteger(
     return false;
 }
 
-export { bindBadChecks, isBadInteger };
+export { bindBadChecks, isBadBoolean, isBadInteger };
