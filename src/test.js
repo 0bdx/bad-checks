@@ -5,11 +5,10 @@ import {
 } from './utilities/index.js';
 import { isBadTypeTest } from './utilities/is-bad-type.js';
 
-import {
+import bindBadChecks, {
     isBadBoolean,
     isBadInteger,
     isBadString,
-    bindBadChecks,
 } from './index.js';
 import { bindBadChecksTest } from './bind-bad-checks.js';
 import { isBadBooleanTest } from './is-bad-boolean.js';

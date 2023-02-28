@@ -1,7 +1,6 @@
 // Note that private methods like `isBadType()` are NOT tested here.
 
-import {
-    bindBadChecks,
+import bindBadChecks, {
     isBadBoolean,
     isBadInteger,
     isBadString,

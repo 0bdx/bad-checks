@@ -1,6 +1,7 @@
 import equal from './private-methods/equal.js';
 import throws from './private-methods/throws.js';
 import isBadType from './utilities/is-bad-type.js';
+import bindBadChecks, { isBadString } from './index.js';
 
 /**
  * Validates a boolean.
@@ -25,17 +26,12 @@ export default function isBadBoolean(
     value,
     identifier = '',
 ) {
+    const [ msgs, isBadStr ] = bindBadChecks('isBadBoolean()', isBadString);
+
     const ep = 'Error: isBadBoolean():'; // error prefix
 
-    // Throw an `Error` if the `msgPrefix` argument is incorrect.
-    if (typeof msgPrefix !== 'string') {
-        if (msgPrefix === null) throw Error(`${ep
-            } msgPrefix is null not type 'string'`);
-        if (Array.isArray(msgPrefix)) throw Error(`${ep
-            } msgPrefix is an array not type 'string'`);
-        throw Error(`${ep
-            } msgPrefix is type '${typeof msgPrefix}' not type 'string'`);
-    }
+    // Throw an `Error` if any arguments are incorrect.
+    if (isBadStr(msgPrefix, 'msgPrefix')) throw Error(msgs[0]);
 
     // Throw an `Error` if the `checkMsgs` argument is incorrect.
     if (!Array.isArray(checkMsgs)) {
@@ -77,21 +73,22 @@ export default function isBadBoolean(
  *     Throws an `Error` if a test fails
  */
 export function isBadBooleanTest(f) {
+    const mp = 'isBadBoolean():'; // message prefix
     const ep = 'Error: isBadBoolean():'; // error prefix
 
     // `msgPrefix` is an incorrect type.
     // @ts-expect-error
     throws(()=>f(),
-        `${ep} msgPrefix is type 'undefined' not type 'string'`);
+        `${mp} msgPrefix is type 'undefined' not 'string'`);
     // @ts-expect-error
     throws(()=>f(null),
-        `${ep} msgPrefix is null not type 'string'`);
+        `${mp} msgPrefix is null not type 'string'`);
     // @ts-expect-error
     throws(()=>f([]),
-        `${ep} msgPrefix is an array not type 'string'`);
+        `${mp} msgPrefix is an array not type 'string'`);
     // @ts-expect-error
     throws(()=>f(123),
-        `${ep} msgPrefix is type 'number' not type 'string'`);
+        `${mp} msgPrefix is type 'number' not 'string'`);
 
     // `checkMsgs` is an incorrect type.
     // @ts-expect-error

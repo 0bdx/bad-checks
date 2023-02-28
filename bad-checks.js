@@ -128,17 +128,12 @@ function isBadBoolean(
     value,
     identifier = '',
 ) {
+    const [ msgs, isBadStr ] = bindBadChecks('isBadBoolean()', isBadString);
+
     const ep = 'Error: isBadBoolean():'; // error prefix
 
-    // Throw an `Error` if the `msgPrefix` argument is incorrect.
-    if (typeof msgPrefix !== 'string') {
-        if (msgPrefix === null) throw Error(`${ep
-            } msgPrefix is null not type 'string'`);
-        if (Array.isArray(msgPrefix)) throw Error(`${ep
-            } msgPrefix is an array not type 'string'`);
-        throw Error(`${ep
-            } msgPrefix is type '${typeof msgPrefix}' not type 'string'`);
-    }
+    // Throw an `Error` if any arguments are incorrect.
+    if (isBadStr(msgPrefix, 'msgPrefix')) throw Error(msgs[0]);
 
     // Throw an `Error` if the `checkMsgs` argument is incorrect.
     if (!Array.isArray(checkMsgs)) {
@@ -300,4 +295,4 @@ function isBadString(
     return checkResult;
 }
 
-export { bindBadChecks, isBadBoolean, isBadInteger, isBadString };
+export { bindBadChecks as default, isBadBoolean, isBadInteger, isBadString };

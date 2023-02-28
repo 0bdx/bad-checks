@@ -35,7 +35,7 @@ export type BoundBadCheck = (...args: any[]) => StringOrFalse;
  * @throws
  *     Throws an `Error` if any of the arguments are invalid.
  */
-export function bindBadChecks(msgPrefix: string, ...badChecks: BadCheck[]): [string[], ...BoundBadCheck];
+declare function bindBadChecks(msgPrefix: string, ...badChecks: BadCheck[]): [string[], ...BoundBadCheck];
 /**
  * Validates a boolean.
  *
@@ -96,3 +96,4 @@ export function isBadInteger(msgPrefix: string, checkMsgs: string[], value: numb
  *     Throws an `Error` if any of the arguments are incorrect.
  */
 export function isBadString(msgPrefix: string, checkMsgs: string[], value: string, identifier?: string): string | false;
+export { bindBadChecks as default };
