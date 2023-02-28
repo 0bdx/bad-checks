@@ -1,6 +1,6 @@
 import equal from './private-methods/equal.js';
 import throws from './private-methods/throws.js';
-import isBadType from './utilities/is-bad-type.js';
+import { isBadType } from './utilities/index.js';
 
 /**
  * Validates a string.

@@ -1,7 +1,7 @@
 import equal from './private-methods/equal.js';
 import throws from './private-methods/throws.js';
-import isBadType from './utilities/is-bad-type.js';
-import bindBadChecks, { isBadString } from './index.js';
+import { isBadType } from './utilities/index.js';
+import bindBadChecks, { isBadString, isBadStringArray } from './index.js';
 
 /**
  * Validates a boolean.
@@ -26,12 +26,14 @@ export default function isBadBoolean(
     value,
     identifier = '',
 ) {
-    const [ msgs, isBadStr ] = bindBadChecks('isBadBoolean()', isBadString);
+    const [ msgs, isBadStr, isBadStrArr ] =
+        bindBadChecks('isBadBoolean()', isBadString, isBadStringArray);
 
     const ep = 'Error: isBadBoolean():'; // error prefix
 
     // Throw an `Error` if any arguments are incorrect.
     if (isBadStr(msgPrefix, 'msgPrefix')) throw Error(msgs[0]);
+    // if (isBadStr(checkMsgs, 'checkMsgs')) throw Error(msgs[0]);
 
     // Throw an `Error` if the `checkMsgs` argument is incorrect.
     if (!Array.isArray(checkMsgs)) {
